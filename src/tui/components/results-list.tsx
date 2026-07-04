@@ -106,7 +106,9 @@ function renderExpandedRow(
       <Box flexDirection="row" gap={2}>
         {renderPreview({ item, preview, protocol: previewProtocol })}
         <Box flexDirection="column" flexGrow={1}>
-          <Text bold color={LIST_TITLE_COLOR}>{item.title}</Text>
+          <Text bold color={LIST_TITLE_COLOR}>
+            {item.title}
+          </Text>
           <Text color={LIST_META_COLOR}>
             {item.votes} votes · {item.category}
           </Text>

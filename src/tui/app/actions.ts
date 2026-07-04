@@ -296,9 +296,10 @@ export function useOpenMediaAction({
   setState,
 }: OpenMediaDeps): () => Promise<void> {
   return useCallback(async () => {
-    const target = state.download.targetPath && state.download.status === "done"
-      ? state.download.targetPath
-      : state.detailItem?.downloadUrl ?? null;
+    const target =
+      state.download.targetPath && state.download.status === "done"
+        ? state.download.targetPath
+        : (state.detailItem?.downloadUrl ?? null);
 
     if (!target) {
       setState((previous) => ({
@@ -330,7 +331,12 @@ export function useOpenMediaAction({
         },
       }));
     }
-  }, [setState, state.detailItem?.downloadUrl, state.download.status, state.download.targetPath]);
+  }, [
+    setState,
+    state.detailItem?.downloadUrl,
+    state.download.status,
+    state.download.targetPath,
+  ]);
 }
 
 type SetLiveWallpaperDeps = Readonly<{
@@ -347,7 +353,10 @@ function isSmartVideoWallpaperInstalled(): boolean {
     ".local/share/plasma/wallpapers",
     SMART_VIDEO_PLUGIN_ID,
   );
-  const systemPath = join("/usr/share/plasma/wallpapers", SMART_VIDEO_PLUGIN_ID);
+  const systemPath = join(
+    "/usr/share/plasma/wallpapers",
+    SMART_VIDEO_PLUGIN_ID,
+  );
   return existsSync(localPath) || existsSync(systemPath);
 }
 

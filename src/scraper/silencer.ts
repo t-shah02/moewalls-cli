@@ -33,7 +33,9 @@ function muteStreamWrite(original: StreamWrite): StreamWrite {
   }) as StreamWrite;
 }
 
-export async function withMutedBackendLogs<T>(fn: () => Promise<T>): Promise<T> {
+export async function withMutedBackendLogs<T>(
+  fn: () => Promise<T>,
+): Promise<T> {
   const stderrWrite = process.stderr.write;
   const stdoutWrite = process.stdout.write;
 

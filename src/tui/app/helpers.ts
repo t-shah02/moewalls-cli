@@ -2,7 +2,11 @@ import { extname } from "node:path";
 import { execFileSync } from "node:child_process";
 import type React from "react";
 import { SPLASH_FADE_MS, SPLASH_HOLD_MS } from "./constants.ts";
-import type { DownloadState, MoewallsAppState, ScreenResolution } from "../../types/index.ts";
+import type {
+  DownloadState,
+  MoewallsAppState,
+  ScreenResolution,
+} from "../../types/index.ts";
 import { SPLASH_TICK_MS } from "../components/index.ts";
 
 const SUPPORTED_VIDEO_EXTENSIONS = new Set([

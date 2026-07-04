@@ -39,10 +39,12 @@ moewalls
 to skip).
 
 `MOEWALLS_RUNTIME_MODE` controls runtime behavior:
+
 - `development` / `dev`: shows debug log path on startup
 - `production`: hides debug log path for cleaner UX (default)
 
 `MOEWALLS_PREVIEW_PROTOCOL` can force image rendering protocol:
+
 - `kitty`: force Kitty graphics mode (recommended for Ghostty if auto-detection is flaky)
 
 If the app exits immediately, check the debug log:

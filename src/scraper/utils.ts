@@ -34,7 +34,9 @@ if (!process.env.PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS) {
 }
 
 export function resolveBrowsersPath(): string {
-  return process.env.PLAYWRIGHT_BROWSERS_PATH ?? defaultPlaywrightBrowsersPath();
+  return (
+    process.env.PLAYWRIGHT_BROWSERS_PATH ?? defaultPlaywrightBrowsersPath()
+  );
 }
 
 export function ensurePlaywrightEnv(): void {
@@ -87,11 +89,13 @@ export function buildSearchUrl(query: string, page = 1): string {
 
 export function getRetryDefaults(): { maxRetries: number; delayMs: number } {
   const maxRetries = Number.parseInt(
-    process.env.MOEWALLS_SCRAPER_MAX_RETRIES ?? String(DEFAULT_SCRAPER_MAX_RETRIES),
+    process.env.MOEWALLS_SCRAPER_MAX_RETRIES ??
+      String(DEFAULT_SCRAPER_MAX_RETRIES),
     10,
   );
   const delayMs = Number.parseInt(
-    process.env.MOEWALLS_SCRAPER_RETRY_DELAY_MS ?? String(DEFAULT_SCRAPER_RETRY_DELAY_MS),
+    process.env.MOEWALLS_SCRAPER_RETRY_DELAY_MS ??
+      String(DEFAULT_SCRAPER_RETRY_DELAY_MS),
     10,
   );
   return {
@@ -227,7 +231,11 @@ export function parseSearchResults(html: string): WallpaperResult[] {
         ? decodeHtmlEntities(categoryMatch[1].trim())
         : "Unknown",
       ...(imgMatch?.[1]
-        ? { thumbnailUrl: normalizeThumbnailUrl(resolveAbsoluteUrl(imgMatch[1])) }
+        ? {
+            thumbnailUrl: normalizeThumbnailUrl(
+              resolveAbsoluteUrl(imgMatch[1]),
+            ),
+          }
         : {}),
     });
   }
@@ -238,7 +246,10 @@ export function parseSearchResults(html: string): WallpaperResult[] {
 function normalizeThumbnailUrl(url: string): string {
   try {
     const parsed = new URL(url);
-    parsed.pathname = parsed.pathname.replace(WP_THUMBNAIL_SIZE_SUFFIX_PATTERN, "");
+    parsed.pathname = parsed.pathname.replace(
+      WP_THUMBNAIL_SIZE_SUFFIX_PATTERN,
+      "",
+    );
     return parsed.toString();
   } catch {
     return url.replace(WP_THUMBNAIL_SIZE_SUFFIX_PATTERN, "");

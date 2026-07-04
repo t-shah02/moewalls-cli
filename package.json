@@ -8,11 +8,13 @@
     "start": "MOEWALLS_RUNTIME_MODE=development bun run src/index.ts",
     "build": "bun run scripts/patch-sixel-upng.mjs && bun build src/index.ts --outdir dist --target bun --minify --external playwright --external playwright-core",
     "build:binary": "bun run scripts/patch-sixel-upng.mjs && bun build src/index.ts --compile --outfile dist/moewalls --external playwright --external playwright-core",
-    "install:browsers": "./scripts/install-browsers.sh"
+    "install:browsers": "./scripts/install-browsers.sh",
+    "format": "prettier --write ."
   },
   "devDependencies": {
     "@types/bun": "latest",
-    "@types/react": "^19.2.2"
+    "@types/react": "^19.2.2",
+    "prettier": "^3.9.4"
   },
   "peerDependencies": {
     "typescript": "^5"

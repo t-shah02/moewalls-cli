@@ -1,8 +1,11 @@
 import { logger } from "./logger.ts";
 import { createMoewallsApp, shutdownMoewallsApp } from "./tui/index.ts";
 
-const runtimeMode = (process.env.MOEWALLS_RUNTIME_MODE ?? "production").toLowerCase();
-const isDevelopmentMode = runtimeMode === "development" || runtimeMode === "dev";
+const runtimeMode = (
+  process.env.MOEWALLS_RUNTIME_MODE ?? "production"
+).toLowerCase();
+const isDevelopmentMode =
+  runtimeMode === "development" || runtimeMode === "dev";
 
 logger.installProcessHandlers();
 

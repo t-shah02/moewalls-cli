@@ -1,5 +1,10 @@
 import type { MoewallsAppState } from "../types/index.ts";
-export type { DownloadState, FocusTarget, MoewallsAppHandle, MoewallsAppState } from "../types/index.ts";
+export type {
+  DownloadState,
+  FocusTarget,
+  MoewallsAppHandle,
+  MoewallsAppState,
+} from "../types/index.ts";
 
 export const initialMoewallsAppState = (): MoewallsAppState => ({
   searchQuery: "",

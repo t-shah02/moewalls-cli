@@ -3,9 +3,7 @@ import { render, useApp } from "ink";
 import { InkPictureProvider, useTerminalInfo } from "ink-picture";
 import { logger } from "../logger.ts";
 import { closeScraperBrowser, getScraperBrowser } from "../scraper/client.ts";
-import {
-  FocusTarget,
-} from "../types/index.ts";
+import { FocusTarget } from "../types/index.ts";
 import type {
   MoewallsAppHandle,
   MoewallsAppState,
@@ -13,10 +11,7 @@ import type {
   WallpaperResult,
 } from "../types/index.ts";
 import { renderMainView } from "./components/index.ts";
-import {
-  startSplashAnimation,
-  detectScreenResolution,
-} from "./app/helpers.ts";
+import { startSplashAnimation, detectScreenResolution } from "./app/helpers.ts";
 import {
   useDetailActions,
   useDownloadAction,
@@ -30,7 +25,8 @@ type PageResultsCache = Map<string, readonly WallpaperResult[]>;
 type ItemDetailsCache = Map<string, WallpaperItemDetails>;
 
 function shouldForceKittyProtocol(): boolean {
-  const forcedProtocol = process.env.MOEWALLS_PREVIEW_PROTOCOL?.trim().toLowerCase();
+  const forcedProtocol =
+    process.env.MOEWALLS_PREVIEW_PROTOCOL?.trim().toLowerCase();
   if (forcedProtocol) {
     return forcedProtocol === "kitty";
   }
@@ -52,7 +48,9 @@ function MoewallsInkApp(): React.ReactElement {
   const { exit } = useApp();
   const terminalInfo = useTerminalInfo();
   const [state, setState] = useState<MoewallsAppState>(initialMoewallsAppState);
-  const [focusTarget, setFocusTarget] = useState<FocusTarget>(FocusTarget.Search);
+  const [focusTarget, setFocusTarget] = useState<FocusTarget>(
+    FocusTarget.Search,
+  );
   const splashTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const searchGenerationRef = useRef(0);
   const didStartRef = useRef(false);
@@ -86,7 +84,10 @@ function MoewallsInkApp(): React.ReactElement {
   });
   const downloadCurrentWallpaper = useDownloadAction({ state, setState });
   const openCurrentMedia = useOpenMediaAction({ state, setState });
-  const setCurrentAsLiveWallpaper = useSetLiveWallpaperAction({ state, setState });
+  const setCurrentAsLiveWallpaper = useSetLiveWallpaperAction({
+    state,
+    setState,
+  });
   const [searchSpinnerFrame, setSearchSpinnerFrame] = useState(0);
   useKeyboardBindings({
     exit,

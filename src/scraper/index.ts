@@ -23,9 +23,7 @@ import {
   withRetry,
 } from "./utils.ts";
 
-export {
-  buildSearchUrl,
-} from "./utils.ts";
+export { buildSearchUrl } from "./utils.ts";
 export type { WallpaperItemDetails, WallpaperResult } from "../types/index.ts";
 
 const NAVIGATION_TIMEOUT_MS = 30_000;
@@ -123,7 +121,9 @@ export class MoewallsBrowser {
     );
   }
 
-  async fetchWallpaperItemDetails(itemUrl: string): Promise<WallpaperItemDetails> {
+  async fetchWallpaperItemDetails(
+    itemUrl: string,
+  ): Promise<WallpaperItemDetails> {
     const { maxRetries } = getRetryDefaults();
     const normalizedUrl = itemUrl.trim();
     if (!normalizedUrl) {
@@ -135,7 +135,10 @@ export class MoewallsBrowser {
         async () => {
           await this.ensurePage();
           const pageHandle = this.page!;
-          const response = await this.navigateToItemPage(pageHandle, normalizedUrl);
+          const response = await this.navigateToItemPage(
+            pageHandle,
+            normalizedUrl,
+          );
 
           assertSuccessfulNavigation(response?.status(), normalizedUrl);
 
@@ -148,7 +151,8 @@ export class MoewallsBrowser {
             fileSizeBytes,
             wallpaperResolution,
           } = parseWallpaperMeta(html);
-          const buttonCandidates = await this.collectButtonDownloadCandidates(pageHandle);
+          const buttonCandidates =
+            await this.collectButtonDownloadCandidates(pageHandle);
           const downloadUrl = await this.resolveWallpaperDownloadUrl({
             pageHandle,
             html,
@@ -189,21 +193,28 @@ export class MoewallsBrowser {
     }
   }
 
-  private async collectButtonDownloadCandidates(pageHandle: Page): Promise<string[]> {
+  private async collectButtonDownloadCandidates(
+    pageHandle: Page,
+  ): Promise<string[]> {
     return pageHandle.evaluate(() => {
       const entries: string[] = [];
       const doc = (globalThis as { document?: any }).document;
       if (!doc) {
         return entries;
       }
-      const elements = Array.from(doc.querySelectorAll("a, button, [role='button']"));
+      const elements = Array.from(
+        doc.querySelectorAll("a, button, [role='button']"),
+      );
       for (const element of elements) {
         const node = element as any;
-        const label = String(node?.textContent ?? "").trim().toLowerCase();
+        const label = String(node?.textContent ?? "")
+          .trim()
+          .toLowerCase();
         if (!label.includes("download")) {
           continue;
         }
-        const anchorHref = node?.tagName === "A" ? String(node?.href ?? "") : "";
+        const anchorHref =
+          node?.tagName === "A" ? String(node?.href ?? "") : "";
         entries.push(anchorHref);
         entries.push(node?.getAttribute?.("href") ?? "");
         entries.push(node?.getAttribute?.("onclick") ?? "");
@@ -231,9 +242,15 @@ export class MoewallsBrowser {
     normalizedUrl: string;
   }>): Promise<string | undefined> {
     const htmlCandidates = extractVideoUrlCandidates(html);
-    const directCandidates = extractDirectDownloadCandidates(html, buttonCandidates);
+    const directCandidates = extractDirectDownloadCandidates(
+      html,
+      buttonCandidates,
+    );
 
-    const directUrl = pickLikelyDownloadUrl([...directCandidates, ...htmlCandidates]);
+    const directUrl = pickLikelyDownloadUrl([
+      ...directCandidates,
+      ...htmlCandidates,
+    ]);
     if (directUrl) {
       return directUrl;
     }
@@ -343,7 +360,9 @@ export class MoewallsBrowser {
         .catch(() => undefined);
 
       if (await button.count()) {
-        await button.click({ timeout: DOWNLOAD_BUTTON_CLICK_TIMEOUT_MS }).catch(() => {});
+        await button
+          .click({ timeout: DOWNLOAD_BUTTON_CLICK_TIMEOUT_MS })
+          .catch(() => {});
         await pageHandle.waitForTimeout(POST_CLICK_SETTLE_MS);
       }
       const popupUrl = await popupPromise;
@@ -359,7 +378,10 @@ export class MoewallsBrowser {
       ].join("\n");
       const payload = extractAjaxPayload(html, ajaxClick);
       if (payload.nonce && payload.postId) {
-        const ajaxUrl = new URL("/wp-admin/admin-ajax.php", normalizedUrl).toString();
+        const ajaxUrl = new URL(
+          "/wp-admin/admin-ajax.php",
+          normalizedUrl,
+        ).toString();
         const origin = new URL(normalizedUrl).origin;
         const ajaxResponse = await pageHandle.request.post(ajaxUrl, {
           headers: {

@@ -31,18 +31,22 @@ function parseFileSizeLabel(label: string): number | undefined {
     return undefined;
   }
   const unit = match[2].toUpperCase();
-  const multiplier = unit === "GB" ? 1024 ** 3 : unit === "MB" ? 1024 ** 2 : 1024;
+  const multiplier =
+    unit === "GB" ? 1024 ** 3 : unit === "MB" ? 1024 ** 2 : 1024;
   return Math.round(value * multiplier);
 }
 
 function stripTags(input: string): string {
-  return input.replace(HTML_TAG_PATTERN, " ").replace(WHITESPACE_PATTERN, " ").trim();
+  return input
+    .replace(HTML_TAG_PATTERN, " ")
+    .replace(WHITESPACE_PATTERN, " ")
+    .trim();
 }
 
 function decodeHtmlEntities(input: string): string {
   return input
     .replaceAll("&amp;", "&")
-    .replaceAll("&quot;", "\"")
+    .replaceAll("&quot;", '"')
     .replaceAll("&#39;", "'")
     .replaceAll("&lt;", "<")
     .replaceAll("&gt;", ">");
@@ -92,7 +96,9 @@ export function parseWallpaperMeta(html: string): {
   wallpaperResolution?: { width: number; height: number; label: string };
 } {
   const text = stripTags(html);
-  const title = decodeHtmlEntities(stripTags(html.match(TITLE_PATTERN)?.[1] ?? "Wallpaper"));
+  const title = decodeHtmlEntities(
+    stripTags(html.match(TITLE_PATTERN)?.[1] ?? "Wallpaper"),
+  );
   const previewImageUrl = html.match(OG_IMAGE_PATTERN)?.[1];
   const tags = Array.from(html.matchAll(TAG_PATTERN))
     .map((match) => decodeHtmlEntities(stripTags(match[1] ?? "")))
@@ -101,7 +107,9 @@ export function parseWallpaperMeta(html: string): {
   const fileSizeLabel = fileSizeMatch
     ? `${fileSizeMatch[1] ?? ""} ${(fileSizeMatch[2] ?? "").toUpperCase()}`.trim()
     : undefined;
-  const fileSizeBytes = fileSizeLabel ? parseFileSizeLabel(fileSizeLabel) : undefined;
+  const fileSizeBytes = fileSizeLabel
+    ? parseFileSizeLabel(fileSizeLabel)
+    : undefined;
   const wallpaperResolution = extractWallpaperResolution(tags, text);
 
   return {
@@ -137,7 +145,9 @@ export function extractInlineDownloadDataUrl(html: string): string | undefined {
   return html.match(DOWNLOAD_DATA_URL_PATTERN)?.[1];
 }
 
-export function pickLikelyDownloadUrl(candidates: readonly string[]): string | undefined {
+export function pickLikelyDownloadUrl(
+  candidates: readonly string[],
+): string | undefined {
   for (const candidate of candidates) {
     if (!candidate) {
       continue;
@@ -158,7 +168,9 @@ export function pickLikelyDownloadUrl(candidates: readonly string[]): string | u
   return undefined;
 }
 
-export function extractDownloadToken(candidates: readonly string[]): string | undefined {
+export function extractDownloadToken(
+  candidates: readonly string[],
+): string | undefined {
   for (const candidate of candidates) {
     if (!candidate) {
       continue;
@@ -183,7 +195,10 @@ export function extractDownloadToken(candidates: readonly string[]): string | un
   return undefined;
 }
 
-export function extractAjaxPayload(html: string, onclickRaw?: string): {
+export function extractAjaxPayload(
+  html: string,
+  onclickRaw?: string,
+): {
   nonce?: string;
   postId?: string;
 } {

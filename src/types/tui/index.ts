@@ -1,4 +1,7 @@
-import type { WallpaperItemDetails, WallpaperResult } from "../scraper/index.ts";
+import type {
+  WallpaperItemDetails,
+  WallpaperResult,
+} from "../scraper/index.ts";
 
 export enum AppInputKey {
   Quit = "q",
